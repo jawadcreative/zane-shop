@@ -25,8 +25,8 @@ export default async function ProductPage({ params }) {
                     <p className="w-md mt-10">{product.description}</p>
                     <p className="mt-4 text-2xl">$ {product.price}</p>
                     <div className="flex gap-3 items-center mt-6">
-                        <Button text={'Add to card'}/>
-                        <Button text={'Buy now'}/>
+                        <Button text={'Add to card'} />
+                        <Button text={'Buy now'} />
                     </div>
                 </div>
             </div>

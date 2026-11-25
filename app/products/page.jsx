@@ -34,7 +34,7 @@ async function ProductList({ searchParams }) {
             <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 
                 {products.map(product => (
-                    <div
+                    <Link href={`/products/${product.id}`}
                         key={product.id}
                         className="p-4 bg-foreground/10 rounded-xl"
                     >
@@ -55,7 +55,7 @@ async function ProductList({ searchParams }) {
                             <p>${product.price}</p>
                             <p>⭐ {product.rating}</p>
                         </div>
-                    </div>
+                    </Link>
                 ))}
 
             </section>
