@@ -2,7 +2,6 @@ import Button from "@/components/Button"
 import Image from "next/image"
 import { Suspense } from "react"
 
-// Skeleton shown while the product loads (same split layout as the real page)
 function ProductSkeleton() {
     return (
         <main className="h-screen w-full flex animate-pulse">
@@ -20,8 +19,6 @@ function ProductSkeleton() {
     )
 }
 
-// The page itself stays synchronous so it can be prerendered as a static shell.
-// All request-time work (params + fetch) happens inside <Suspense>.
 export default function ProductPage({ params }) {
     return (
         <Suspense fallback={<ProductSkeleton />}>
