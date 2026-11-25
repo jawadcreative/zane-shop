@@ -1,7 +1,33 @@
 import Button from "@/components/Button"
 import Image from "next/image"
+import { Suspense } from "react"
 
-export default async function ProductPage({ params }) {
+function ProductSkeleton() {
+    return (
+        <main className="h-screen w-full flex animate-pulse">
+            <div className="w-1/2 h-full bg-foreground/10" />
+            <div className="h-screen w-1/2 flex flex-col items-center justify-center">
+                <div className="flex flex-col gap-2">
+                    <div className="h-4 w-24 rounded bg-foreground/20" />
+                    <div className="h-8 w-md rounded bg-foreground/20" />
+                    <div className="h-4 w-16 rounded bg-foreground/20" />
+                    <div className="mt-10 h-20 w-md rounded bg-foreground/20" />
+                    <div className="mt-4 h-8 w-24 rounded bg-foreground/20" />
+                </div>
+            </div>
+        </main>
+    )
+}
+
+export default function ProductPage({ params }) {
+    return (
+        <Suspense fallback={<ProductSkeleton />}>
+            <ProductDetails params={params} />
+        </Suspense>
+    )
+}
+
+async function ProductDetails({ params }) {
     const { id } = await params
 
     const response = await fetch(`https://dummyjson.com/products/${id}`)
