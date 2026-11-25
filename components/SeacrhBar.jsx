@@ -1,15 +1,48 @@
-import React from 'react'
+async function categoryList() {
+    const response = await fetch('https://dummyjson.com/products/categories', {
+        next: { revalidate: 3600 },
+    })
 
-const SeacrhBar = () => {
+    if (!response.ok) {
+        throw new Error(`Request failed: ${response.status}`)
+    }
+
+    return response.json()
+}
+
+const SeacrhBar = async ({ search = '', category = '' }) => {
+    const categories = await categoryList()
+
     return (
-        <div className="w-full flex justify-between items-center">
-            <input placeholder='search something....' type="search" name="search" id="searchBar" className='py-2 px-6 w-lg border border-foreground/40 outline-none rounded-full' />
-            <select name="category" id="category" className='p-2 flex gap-2 border border-foreground/40 rounded-md outline-none'>
-                <option className='bg-background text-foreground' value="all" selected>All</option>
-                <option className='bg-background text-foreground' value="stationary">Stationary</option>
-                <option className='bg-background text-foreground' value="home-decore">Home Decoratione</option>
+        <form action="/products" method="get" className="w-full flex flex-wrap gap-3 items-center">
+            <input
+                placeholder="Search products..."
+                type="search"
+                name="search"
+                id="searchBar"
+                defaultValue={search}
+                className="py-2 px-6 flex-1 min-w-48 border border-foreground/40 outline-none rounded-full"
+            />
+            <select
+                name="category"
+                id="category"
+                defaultValue={category}
+                className="p-2 border border-foreground/40 rounded-md outline-none bg-background text-foreground"
+            >
+                <option value="">All categories</option>
+                {categories.map(item => (
+                    <option key={item.slug} value={item.slug}>
+                        {item.name}
+                    </option>
+                ))}
             </select>
-        </div>
+            <button
+                type="submit"
+                className="px-6 py-2 rounded-full bg-foreground text-background"
+            >
+                Search
+            </button>
+        </form>
     )
 }
 

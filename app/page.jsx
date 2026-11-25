@@ -1,9 +1,9 @@
 "use client";
 import { useGSAP } from "@gsap/react";
-import Link from "next/link";
 import React, { useRef } from "react";
 import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
+import Button from "@/components/Button";
 gsap.registerPlugin(SplitText);
 
 const page = () => {
@@ -43,13 +43,7 @@ const page = () => {
       </div>
       <div className="flex flex-col gap-3 items-start">
         <h2 className="text-2xl">Follow your dreams.</h2>
-        <Link
-          href="/products"
-          className="relative inline-block px-12 py-2 bg-foreground text-background cursor-pointer
-          before:absolute before:inset-0 before:bg-background before:transition-transform before:duration-300 before:scale-x-0 before:origin-left hover:before:scale-x-100 hover:text-foreground before:z-10 border border-foreground"
-        >
-          <span className="relative z-10">Shop now</span>
-        </Link>
+        <Button text={'Shop now'} />
       </div>
     </section>
   );
