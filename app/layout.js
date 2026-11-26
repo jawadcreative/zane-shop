@@ -1,7 +1,7 @@
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import Preloader from "@/components/Preloader";
+// import Preloader from "@/components/Preloader";
 
 const outfit = Outfit({
   variable: "--font-outfit",
@@ -20,7 +20,7 @@ export default function RootLayout({ children }) {
       className={`${outfit.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Preloader />
+        {/* <Preloader /> */}
         <Navbar />
         {children}
       </body>

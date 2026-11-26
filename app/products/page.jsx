@@ -1,15 +1,36 @@
+import React, { Suspense } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Suspense } from 'react'
+import SearchBar from '@/components/SearchBar'
+
+const LIMIT = 16
+
+function ProductSkeleton() {
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-pulse">
+            {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="space-y-3">
+                    <div className="h-56 bg-foreground/10 rounded-lg" />
+                    <div className="h-5 w-3/4 bg-foreground/10 rounded" />
+                    <div className="h-4 w-1/4 bg-foreground/10 rounded" />
+                </div>
+            ))}
+        </div>
+    )
+}
 
 async function ProductList({ searchParams }) {
     const params = await searchParams
 
-    const limit = 16
-    const page = Math.max(1, Number(params.page) || 1)
-    const skip = (page - 1) * limit
+    const search = typeof params.search === 'string'
+        ? params.search.trim()
+        : ''
 
-    const url = `https://dummyjson.com/products?limit=${limit}&skip=${skip}`
+    const page = Math.max(1, Number(params.page) || 1)
+
+    const url = search
+        ? `https://dummyjson.com/products/search?q=${encodeURIComponent(search)}&limit=${LIMIT}&skip=${(page - 1) * LIMIT}`
+        : `https://dummyjson.com/products?limit=${LIMIT}&skip=${(page - 1) * LIMIT}`
 
     const response = await fetch(url)
 
@@ -17,108 +38,111 @@ async function ProductList({ searchParams }) {
         throw new Error(`Request failed: ${response.status}`)
     }
 
-    const data = await response.json()
+    const { products, total } = await response.json()
 
-    const products = data.products
-    const totalPages = Math.ceil(data.total / limit)
-
-    // Pagination URL
-    function getPageUrl(pageNumber) {
-        return `/products?page=${pageNumber}`
-    }
+    const totalPages = Math.ceil(total / LIMIT)
 
     return (
-        <main className="p-12 flex flex-col gap-6">
-
+        <>
             {/* Products */}
-            <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {products.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+                    {products.map((item) => (
+                        <Link
+                            href={`/products/${item.id}`}
+                            key={item.id}
+                            className="group"
+                        >
+                            <div className="relative h-64 bg-foreground/5 rounded-lg overflow-hidden">
+                                <Image
+                                    src={item.thumbnail}
+                                    alt={item.title}
+                                    fill
+                                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                                    className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                            </div>
 
-                {products.map(product => (
-                    <Link href={`/products/${product.id}`}
-                        key={product.id}
-                        className="p-4 bg-foreground/10 rounded-xl"
-                    >
-                        <div className="h-32 w-32 mx-auto overflow-hidden rounded-3xl">
-                            <Image
-                                src={product.thumbnail}
-                                width={150}
-                                height={150}
-                                alt={product.title}
-                                className="h-full w-full object-cover"
-                            />
-                        </div>
+                            <h2 className="font-semibold mt-3">
+                                {item.title}
+                            </h2>
 
-                        <p className="text-xl">{product.title}</p>
-                        <p className="text-xs">{product.category}</p>
+                            <p className="text-foreground/60 text-sm capitalize">
+                                {item.category}
+                            </p>
 
-                        <div className="mt-3 flex justify-between">
-                            <p>${product.price}</p>
-                            <p>⭐ {product.rating}</p>
-                        </div>
-                    </Link>
-                ))}
-
-            </section>
+                            <div className="flex items-center justify-between">
+                                <p className="font-bold mt-2">
+                                    ${item.price}
+                                </p>
+                                <p>⭐ {item.rating}</p>
+                            </div>
+                        </Link>
+                    ))}
+                </div>
+            ) : (
+                <div className="py-20 text-center">
+                    <h2 className="text-2xl font-bold">
+                        No products found
+                    </h2>
+                    <p className="text-foreground/60 mt-2">
+                        Try searching for another product.
+                    </p>
+                </div>
+            )}
 
             {/* Pagination */}
-            <nav className="flex justify-center items-center gap-6">
-
-                {page > 1 && (
-                    <Link href={getPageUrl(page - 1)}>
+            {totalPages > 1 && (
+                <div className="flex justify-center items-center gap-4 mt-12">
+                    <Link
+                        href={`/products?page=${page - 1}${search ? `&search=${encodeURIComponent(search)}` : ''}`}
+                        className={`px-4 py-2 border rounded ${page === 1
+                            ? 'pointer-events-none opacity-40'
+                            : ''
+                            }`}
+                        aria-disabled={page === 1}
+                    >
                         Previous
                     </Link>
-                )}
 
-                <p>
-                    Page {page} of {totalPages}
-                </p>
+                    <span>
+                        Page {page} of {totalPages}
+                    </span>
 
-                {page < totalPages && (
-                    <Link href={getPageUrl(page + 1)}>
+                    <Link
+                        href={`/products?page=${page + 1}${search ? `&search=${encodeURIComponent(search)}` : ''}`}
+                        className={`px-4 py-2 border rounded ${page >= totalPages
+                            ? 'pointer-events-none opacity-40'
+                            : ''
+                            }`}
+                        aria-disabled={page >= totalPages}
+                    >
                         Next
                     </Link>
-                )}
+                </div>
+            )}
+        </>
+    )
+}
 
-            </nav>
+export default function ProductsPage({ searchParams }) {
+    return (
+        <main className="px-5 py-10">
+
+            {/* Heading and Search */}
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-5 mb-10">
+                <h1 className="text-3xl font-bold">
+                    All Products
+                </h1>
+
+                <SearchBar />
+            </div>
+
+            {/* Product List */}
+            <Suspense fallback={<ProductSkeleton />}>
+                <ProductList searchParams={searchParams} />
+            </Suspense>
 
         </main>
-    )
-}
-
-
-// Skeleton Loading
-function Skeleton() {
-    return (
-        <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-12 pt-28">
-
-            {Array.from({ length: 16 }).map((_, index) => (
-                <div
-                    key={index}
-                    className="p-4 bg-foreground/10 rounded-xl animate-pulse"
-                >
-                    <div className="h-32 w-32 mx-auto rounded-3xl bg-foreground/20" />
-
-                    <div className="mt-4 h-4 w-3/4 rounded bg-foreground/20" />
-
-                    <div className="mt-2 h-3 w-1/2 rounded bg-foreground/20" />
-
-                    <div className="mt-4 flex justify-between">
-                        <div className="h-4 w-12 rounded bg-foreground/20" />
-                        <div className="h-4 w-12 rounded bg-foreground/20" />
-                    </div>
-                </div>
-            ))}
-
-        </section>
-    )
-}
-
-
-// Main Page
-export default function Products({ searchParams }) {
-    return (
-        <Suspense fallback={<Skeleton />}>
-            <ProductList searchParams={searchParams} />
-        </Suspense>
     )
 }
