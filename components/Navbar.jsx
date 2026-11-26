@@ -4,7 +4,7 @@ import React from 'react'
 
 const Navbar = () => {
   return (
-    <header className='px-12 py-4 flex justify-between items-center sticky top-0 w-full'>
+    <header className='px-6 py-4 flex justify-between items-center fixed top-0 w-full z-50'>
       <Link href={'/'} className='flex items-center gap-2'>
         <Image src={'/images/z-mark.png'} height={30} width={30} alt='z-mark' />
         <span>Zane Shop</span>

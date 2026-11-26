@@ -13,7 +13,7 @@ export default function CartPage() {
         totalPrice,
     } = useCart();
 
-    if (!loaded) return <p className="p-10">Loading cart...</p>;
+    if (!loaded) return <div className="p-10 h-screen w-full flex items-center justify-center">Loading cart...</div>;
 
     if (cart.length === 0) {
         return (
@@ -50,14 +50,14 @@ export default function CartPage() {
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => decreaseQty(item.id)}
-                                className="h-8 w-8 rounded border"
+                                className="h-8 w-8 rounded border cursor-pointer"
                             >
                                 -
                             </button>
                             <span>{item.quantity}</span>
                             <button
                                 onClick={() => increaseQty(item.id)}
-                                className="h-8 w-8 rounded border"
+                                className="h-8 w-8 rounded border cursor-pointer"
                             >
                                 +
                             </button>
@@ -65,7 +65,7 @@ export default function CartPage() {
 
                         <button
                             onClick={() => removeFromCart(item.id)}
-                            className="text-red-500"
+                            className="text-red-500 cursor-pointer"
                         >
                             Remove
                         </button>
@@ -74,7 +74,7 @@ export default function CartPage() {
             </div>
 
             <div className="mt-6 flex items-center justify-between">
-                <button onClick={clearCart} className="text-gray-500 underline">
+                <button onClick={clearCart} className="text-gray-500 underline cursor-pointer">
                     Clear cart
                 </button>
                 <p className="text-xl font-bold">Total: ${totalPrice.toFixed(2)}</p>

@@ -22,9 +22,9 @@ const page = () => {
     });
   });
   return (
-    <section className="h-screen w-full flex flex-col justify-end p-12">
+    <section className="lg:h-screen h-[50vh] w-full flex flex-col justify-center lg:justify-end p-6">
       <div className="leading-0">
-        <div className="overflow-hidden">
+        <div className="overflow-hidden h-fit w-fit">
           <h1
             ref={head1}
             className="text-[clamp(2rem,12vw,12rem)] font-extrabold leading-none"
@@ -32,7 +32,7 @@ const page = () => {
             ZANE
           </h1>
         </div>
-        <div className="overflow-hidden">
+        <div className="overflow-hidden h-fit w-fit">
           <h1
             ref={head2}
             className="text-[clamp(2rem,12vw,12rem)] font-extrabold leading-none"
