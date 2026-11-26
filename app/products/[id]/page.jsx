@@ -1,4 +1,5 @@
 import Button from "@/components/Button"
+import AddToCartButton from "@/components/AddToCartButton"
 import Image from "next/image"
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
@@ -86,7 +87,14 @@ async function ProductDetails({ params }) {
                     </p>
 
                     <div className="flex flex-wrap gap-3 items-center mt-6">
-                        <Button text="Add to cart" />
+                        <AddToCartButton
+                            product={{
+                                id: product.id,
+                                name: product.title,
+                                price: product.price,
+                                image: product.thumbnail,
+                            }}
+                        />
                         <Button text="Buy now" />
                     </div>
 
