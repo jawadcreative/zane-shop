@@ -127,7 +127,7 @@ async function ProductList({ searchParams }) {
 
 export default function ProductsPage({ searchParams }) {
     return (
-        <main className="px-5 py-10">
+        <main className="px-5 pt-16">
 
             {/* Heading and Search */}
             <div className="flex flex-col sm:flex-row justify-between items-center gap-5 mb-10">
