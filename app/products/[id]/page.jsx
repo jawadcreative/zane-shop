@@ -1,6 +1,6 @@
-
 import Button from "@/components/Button"
 import Image from "next/image"
+import { notFound } from "next/navigation"
 import { Suspense } from "react"
 
 function ProductSkeleton() {
@@ -37,6 +37,10 @@ async function ProductDetails({ params }) {
     const response = await fetch(
         `https://dummyjson.com/products/${id}`
     )
+
+    if (response.status === 404) {
+        notFound()
+    }
 
     if (!response.ok) {
         throw new Error(`Failed to fetch product: ${response.status}`)
