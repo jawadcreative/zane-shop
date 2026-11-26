@@ -4,7 +4,6 @@ import React, { useRef } from "react";
 import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
 import Button from "@/components/Button";
-import Image from "next/image";
 gsap.registerPlugin(SplitText);
 
 const page = () => {
