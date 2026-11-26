@@ -1,6 +1,7 @@
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { CartProvider } from "./context/CartContext";
 // import Preloader from "@/components/Preloader";
 
 const outfit = Outfit({
@@ -21,8 +22,10 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex flex-col">
         {/* <Preloader /> */}
-        <Navbar />
-        {children}
+        <CartProvider>
+          <Navbar />
+          {children}
+        </CartProvider>
       </body>
     </html>
   );
