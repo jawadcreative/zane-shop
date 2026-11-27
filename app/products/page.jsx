@@ -127,10 +127,10 @@ async function ProductList({ searchParams }) {
 
 export default function ProductsPage({ searchParams }) {
     return (
-        <main className="px-5 pt-16">
+        <main className="px-4 pb-10 pt-8 sm:px-6 sm:pt-10">
 
             {/* Heading and Search */}
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-5 mb-10">
+            <div className="mb-8 flex flex-col items-stretch justify-between gap-4 sm:mb-10 sm:flex-row sm:items-center sm:gap-5">
                 <h1 className="text-3xl font-bold">
                     All Products
                 </h1>

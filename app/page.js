@@ -6,7 +6,7 @@ import gsap from "gsap";
 import Button from "@/components/Button";
 gsap.registerPlugin(SplitText);
 
-const page = () => {
+const HomePage = () => {
   const head1 = useRef(null);
   const head2 = useRef(null);
   useGSAP(() => {
@@ -22,7 +22,7 @@ const page = () => {
     });
   });
   return (
-    <section className="lg:h-screen h-[50vh] w-full flex flex-col justify-center lg:justify-end p-6">
+    <section className="flex min-h-[50vh] w-full flex-col justify-center p-4 sm:p-6 lg:min-h-[calc(100svh-4rem)] lg:justify-end">
       <div className="leading-0">
         <div className="overflow-hidden h-fit w-fit">
           <h1
@@ -49,4 +49,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default HomePage;
