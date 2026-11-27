@@ -4,9 +4,11 @@ import React, { useRef } from "react";
 import { SplitText } from "gsap/SplitText";
 import gsap from "gsap";
 import Button from "@/components/Button";
+import { useRouter } from "next/navigation";
 gsap.registerPlugin(SplitText);
 
 const HomePage = () => {
+  const router = useRouter()
   const head1 = useRef(null);
   const head2 = useRef(null);
   useGSAP(() => {
@@ -21,6 +23,10 @@ const HomePage = () => {
       stagger: 0.05,
     });
   });
+
+  const handleClick = () => {
+    router.push('/products')
+  }
   return (
     <section className="flex min-h-[50vh] w-full flex-col justify-center p-4 sm:p-6 lg:min-h-[calc(100svh-4rem)] lg:justify-end">
       <div className="leading-0">
@@ -43,7 +49,7 @@ const HomePage = () => {
       </div>
       <div className="flex flex-col gap-3 items-start">
         <h2 className="text-2xl">Follow your dreams.</h2>
-        <Button text={'Shop now'} />
+        <Button text={'Shop now'} handleClick={handleClick} />
       </div>
     </section>
   );

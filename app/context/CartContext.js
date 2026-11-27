@@ -7,7 +7,6 @@ export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
-  // Runs once after the first render: restore the saved cart
   useEffect(() => {
     try {
       const saved = localStorage.getItem("cart");
@@ -18,7 +17,6 @@ export function CartProvider({ children }) {
     setLoaded(true);
   }, []);
 
-  // Runs whenever the cart changes: save it (only after the restore above)
   useEffect(() => {
     if (loaded) localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart, loaded]);

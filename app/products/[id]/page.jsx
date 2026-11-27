@@ -4,14 +4,34 @@ import Image from "next/image"
 import { notFound } from "next/navigation"
 import { Suspense } from "react"
 
+export async function generateMetadata({ params }) {
+    const { id } = await params
+    const res = await fetch(`https://dummyjson.com/products/${id}`)
+    if (!res.ok) return {}
+    const product = await res.json()
+
+    const description = product.description.slice(0, 155)
+
+    return {
+        title: product.title,
+        description,
+        alternates: { canonical: `/products/${id}` },
+        openGraph: {
+            type: "website",
+            siteName: "Zane Shop",
+            title: `${product.title} | Zane Shop`,
+            description,
+            url: `/products/${id}`,
+        },
+    }
+}
+
 function ProductSkeleton() {
     return (
         <main className="flex min-h-screen w-full animate-pulse flex-col lg:flex-row">
-            {/* Image Skeleton */}
-            <div className="h-[360px] w-full bg-foreground/10 sm:h-[420px] lg:h-screen lg:w-1/2" />
+            <div className="h-90 w-full bg-foreground/10 sm:h-105 lg:h-screen lg:w-1/2" />
 
-            {/* Details Skeleton */}
-            <div className="flex min-h-[360px] w-full flex-col items-center justify-center p-5 sm:p-8 lg:min-h-screen lg:w-1/2">
+            <div className="flex min-h-90 w-full flex-col items-center justify-center p-5 sm:p-8 lg:min-h-screen lg:w-1/2">
                 <div className="flex flex-col gap-3 w-full max-w-md">
                     <div className="h-4 w-24 rounded bg-foreground/20" />
                     <div className="h-8 w-full rounded bg-foreground/20" />
@@ -48,12 +68,47 @@ async function ProductDetails({ params }) {
     }
 
     const product = await response.json()
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name: product.title,
+        image: product.images?.length ? product.images : [product.thumbnail],
+        description: product.description,
+        sku: product.sku,
+        category: product.category,
+        ...(product.brand && {
+            brand: { "@type": "Brand", name: product.brand },
+        }),
+        offers: {
+            "@type": "Offer",
+            url: `https://zane-shop.vercel.app/products/${id}`,
+            price: product.price,
+            priceCurrency: "USD",
+            availability:
+                product.stock > 0
+                    ? "https://schema.org/InStock"
+                    : "https://schema.org/OutOfStock",
+        },
+        ...(product.reviews?.length && {
+            aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: product.rating,
+                reviewCount: product.reviews.length,
+            },
+        }),
+    }
 
     return (
         <main className="flex min-h-screen w-full flex-col lg:flex-row">
 
-            {/* Product Image */}
-            <div className="relative h-[360px] w-full sm:h-[420px] lg:h-screen lg:w-1/2">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+                }}
+            />
+
+            <div className="relative h-90 w-full sm:h-105 lg:h-screen lg:w-1/2">
                 <Image
                     src={product.thumbnail}
                     alt={product.title}
@@ -64,7 +119,6 @@ async function ProductDetails({ params }) {
                 />
             </div>
 
-            {/* Product Details */}
             <div className="flex w-full flex-col items-center justify-center px-5 py-10 sm:px-8 lg:w-1/2 lg:p-10">
                 <div className="flex flex-col gap-2 w-full max-w-md">
 
