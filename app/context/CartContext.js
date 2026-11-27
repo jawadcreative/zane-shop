@@ -8,17 +8,18 @@ export function CartProvider({ children }) {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("cart");
-      if (saved) setCart(JSON.parse(saved));
-    } catch (e) {
-      console.error("Could not read cart", e);
+    if (!loaded) {
+      try {
+        const saved = localStorage.getItem("cart");
+        if (saved) setCart(JSON.parse(saved));
+      } catch (e) {
+        console.error("Could not read cart", e);
+      }
+      setLoaded(true);
+      return;
     }
-    setLoaded(true);
-  }, []);
 
-  useEffect(() => {
-    if (loaded) localStorage.setItem("cart", JSON.stringify(cart));
+    localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart, loaded]);
 
   function addToCart(product) {
