@@ -22,7 +22,7 @@ export default function AddToCartButton({ product }) {
     <>
       <button
         onClick={handleClick}
-        className="relative inline-block px-12 py-2 bg-background text-foreground cursor-pointer before:absolute before:inset-0 before:bg-foreground before:transition-transform before:duration-300 before:scale-x-0 before:origin-left hover:before:scale-x-100 hover:text-background before:z-10 border border-foreground">
+        className="relative inline-block border border-foreground bg-background px-8 py-2 text-foreground cursor-pointer before:absolute before:inset-0 before:z-10 before:origin-left before:scale-x-0 before:bg-foreground before:transition-transform before:duration-300 hover:text-background hover:before:scale-x-100 sm:px-12">
         <span className="relative z-10">Add to cart</span>
       </button>
       {showMessage && (

@@ -6,12 +6,12 @@ import { Suspense } from "react"
 
 function ProductSkeleton() {
     return (
-        <main className="min-h-screen w-full flex flex-col md:flex-row animate-pulse">
+        <main className="flex min-h-screen w-full animate-pulse flex-col lg:flex-row">
             {/* Image Skeleton */}
-            <div className="w-full md:w-1/2 h-[400px] md:h-screen bg-foreground/10" />
+            <div className="h-[360px] w-full bg-foreground/10 sm:h-[420px] lg:h-screen lg:w-1/2" />
 
             {/* Details Skeleton */}
-            <div className="w-full md:w-1/2 min-h-[400px] md:min-h-screen flex flex-col items-center justify-center p-6">
+            <div className="flex min-h-[360px] w-full flex-col items-center justify-center p-5 sm:p-8 lg:min-h-screen lg:w-1/2">
                 <div className="flex flex-col gap-3 w-full max-w-md">
                     <div className="h-4 w-24 rounded bg-foreground/20" />
                     <div className="h-8 w-full rounded bg-foreground/20" />
@@ -50,10 +50,10 @@ async function ProductDetails({ params }) {
     const product = await response.json()
 
     return (
-        <main className="min-h-screen w-full flex flex-col md:flex-row">
+        <main className="flex min-h-screen w-full flex-col lg:flex-row">
 
             {/* Product Image */}
-            <div className="relative w-full md:w-1/2 h-[400px] md:h-screen">
+            <div className="relative h-[360px] w-full sm:h-[420px] lg:h-screen lg:w-1/2">
                 <Image
                     src={product.thumbnail}
                     alt={product.title}
@@ -65,7 +65,7 @@ async function ProductDetails({ params }) {
             </div>
 
             {/* Product Details */}
-            <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-6 md:p-10">
+            <div className="flex w-full flex-col items-center justify-center px-5 py-10 sm:px-8 lg:w-1/2 lg:p-10">
                 <div className="flex flex-col gap-2 w-full max-w-md">
 
                     <p className="text-sm text-foreground/60 capitalize">
