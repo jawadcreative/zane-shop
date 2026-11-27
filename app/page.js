@@ -28,7 +28,7 @@ const HomePage = () => {
     router.push('/products')
   }
   return (
-    <section className="flex min-h-[50vh] w-full flex-col justify-center p-4 sm:p-6 lg:min-h-[calc(100svh-4rem)] lg:justify-end">
+    <section className="h-screen flex w-full flex-col justify-center p-4 sm:p-6 md:justify-end">
       <div className="leading-0">
         <div className="overflow-hidden h-fit w-fit">
           <h1
