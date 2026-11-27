@@ -2,6 +2,7 @@ import React, { Suspense } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import SearchBar from '@/components/SearchBar'
+import AnimatedGrid from '@/components/AnimatedGrid'
 
 const LIMIT = 16
 
@@ -44,14 +45,13 @@ async function ProductList({ searchParams }) {
 
     return (
         <>
-            {/* Products */}
             {products.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
+                <AnimatedGrid key={`${search}-${page}`} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
                     {products.map((item) => (
                         <Link
                             href={`/products/${item.id}`}
                             key={item.id}
-                            className="group"
+                            className="group product-card"
                         >
                             <div className="relative h-64 bg-foreground/5 rounded-lg overflow-hidden">
                                 <Image
@@ -79,7 +79,7 @@ async function ProductList({ searchParams }) {
                             </div>
                         </Link>
                     ))}
-                </div>
+                </AnimatedGrid>
             ) : (
                 <div className="py-20 text-center">
                     <h2 className="text-2xl font-bold">
@@ -91,7 +91,6 @@ async function ProductList({ searchParams }) {
                 </div>
             )}
 
-            {/* Pagination */}
             {totalPages > 1 && (
                 <div className="flex justify-center items-center gap-4 mt-12">
                     <Link
@@ -129,7 +128,6 @@ export default function ProductsPage({ searchParams }) {
     return (
         <main className="px-4 pb-10 pt-8 sm:px-6 sm:pt-10">
 
-            {/* Heading and Search */}
             <div className="mb-8 flex flex-col items-stretch justify-between gap-4 sm:mb-10 sm:flex-row sm:items-center sm:gap-5">
                 <h1 className="text-3xl font-bold">
                     All Products
@@ -138,7 +136,6 @@ export default function ProductsPage({ searchParams }) {
                 <SearchBar />
             </div>
 
-            {/* Product List */}
             <Suspense fallback={<ProductSkeleton />}>
                 <ProductList searchParams={searchParams} />
             </Suspense>
